@@ -37,32 +37,57 @@ module.exports = function(grunt){
             } 
         },
 
-        //压缩css  
-        cssmin: {  
-            //文件头部输出信息  
-          main:{  
-            options: {  
-                 banner: '/*!webAddr:<%= pkg.webAddr %>, author:<%= pkg.author %>, email:<%= pkg.email %>, version:v-<%= grunt.template.today("yyyy-mm-dd") %>:'+version+' */\n',  
-                paths:["css"],  
-                //美化代码  
-                beautify: {  
-                    //中文ascii化，非常有用！防止中文乱码的神配置  
-                    ascii_only: true  
-                }  
-            },  
+        //压缩css
+        cssmin: {
+            // options: {
+            //     stripBanners:true, //合并时允许输出头部信息
+            //     //banner: '/*!<%=pkg.name%>-<%=pkg.version%>-'+'<%=grunt.template.today("yyyy-mm-dd")%>*/\n'
+            //     banner:'/*!<%= pkg.name %> - <%= pkg.version %>-'+'<%=grunt.template.today("yyyy-mm-dd") %> */\n'
+            // },
+            // build: {
+            //     src:'src/*.css',//压缩是要压缩合并的
+            //     //dest:'bulid/css/<%=pkg.name%>-<%=pkg.version%>.min.css' //dest 是目的地输出
+            //     dest:'build/css',
+            //     ext: '.min.css'
+            // }
+            options: {
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                //美化代码
+                beautify: {
+                    //中文ascii化，非常有用！防止中文乱码的神配置
+                    ascii_only: true
+                }
+            },
+            // build :{
+            //             expand: true,
+            //             //相对路径
+            //             cwd: 'src/',
+            //             src: '*.css',
+            //             dest: 'build/css/',
+            //             rename: function (dest, src) {  
+            //                     var folder = src.substring(0, src.lastIndexOf('/'));  
+            //                     var filename = src.substring(src.lastIndexOf('/'), src.length);  
+            //                     //  var filename=src;  
+            //                     filename = filename.substring(0, filename.lastIndexOf('.'));  
+            //                     var fileresult=dest + folder + filename + '.min.css';  
+            //                     grunt.log.writeln("现处理文件："+src+"  处理后文件："+fileresult);  
+            //                     return fileresult;  
+            //                   //return  filename + '.min.js';
+            //                     }
+            //         }
+            build: {
+                 files: [
+                     {
+                         expand: true,
+                         //相对路径
+                         cwd: 'src/',
+                         src: '*.css',
+                         dest: 'build/css'
+                     }
+                 ]
+             }
             
-                files: [  
-                    {  
-                        expand: true,  
-                        //相对路径  
-                        cwd: 'src/',  
-                        src: ['*.css','!*.min.css'],  
-                        dest: 'bulid/css/',                         
-                        ext:".min.css"  
-                    }  
-                ]        
-         }  
-      },      
+        },
 
         //watch插件的配置信息
         watch: {

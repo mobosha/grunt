@@ -18,17 +18,52 @@ module.exports = function(grunt){
         },
 
         //uglify插件的配置信息
+        // uglify: {
+        //     main:{
+        //         options: {
+        //             sourceMap: true
+        //         },
+        //         files: [  
+        //             {  
+        //                 expand: true,  
+        //                 //相对路径  
+        //                 cwd: 'src/',  
+        //                 src: ['*.js','!*.min.js'],  
+        //                 dest: 'bulid/js',                         
+        //                 ext: '.min.js'  
+        //             }  
+        //         ]   
+        //     }
+        // },
+        //压缩js
         uglify: {
+            //文件头部输出信息
             options: {
-                stripBanners: true,
-                banner: '/*! <%=pkg.name%>-<%=pkg.version%>.js <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
-            build: {
-                src: 'src/test.js',
-                dest: 'bulid/js/<%=pkg.name%>-<%=pkg.version%>.js.min.js'
+            my_target: {
+                files: [
+                    {
+                        expand: true,
+                        //相对路径
+                        cwd: 'src/',
+                        src: '*.js',
+                        dest: 'bulid/js/',
+                        rename: function (dest, src) {  
+                                  var folder = src.substring(0, src.lastIndexOf('/'));  
+                                  var filename = src.substring(src.lastIndexOf('/'), src.length);  
+                                  //  var filename=src;  
+                                  filename = filename.substring(0, filename.lastIndexOf('.'));  
+                                  var fileresult=dest + folder + filename + '.min.js';  
+                                  grunt.log.writeln("现处理文件："+src+"  处理后文件："+fileresult);  
+                                  return fileresult;  
+                                  //return  filename + '.min.js';  
+                              } 
+                    }
+                ]
             }
         },
-
+        
         //csslint插件的配置信息
         csslint:{
             build:['src/*.css'],
@@ -37,21 +72,19 @@ module.exports = function(grunt){
             } 
         },
 
-        //压缩css
         //压缩css  
         cssmin: {  
             //文件头部输出信息  
-          main:{  
-            options: {  
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-                paths:["css"],  
-                //美化代码  
-                beautify: {  
-                    //中文ascii化，非常有用！防止中文乱码的神配置  
-                    ascii_only: true  
-                }  
-            },  
-            
+            main:{  
+                options: {  
+                    banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                    paths:["css"],  
+                    //美化代码  
+                    beautify: {  
+                        //中文ascii化，非常有用！防止中文乱码的神配置  
+                        ascii_only: true  
+                    }  
+                },  
                 files: [  
                     {  
                         expand: true,  
@@ -62,8 +95,8 @@ module.exports = function(grunt){
                         ext:".min.css"  
                     }  
                 ]        
-         }  
-      },  
+            }  
+        },  
 
         //watch插件的配置信息
         watch: {
